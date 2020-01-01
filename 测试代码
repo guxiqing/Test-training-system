@@ -1,0 +1,665 @@
+Problem.java
+package ch5.data;
+public class Problem {
+    boolean isChoice;
+    boolean isJudge;
+    String content;
+    String giveChoiceA,giveChoiceB,giveChoiceC,giveChoiceD;
+    String imageName;
+    String correctAnswer="QWEQ@#$@!@#1QWEQ";
+    //用户回答的初始答案和correctAnswer不同,防止出题人忘记给正确答案
+    String userAnswer ="" ;
+    public boolean giveChoice() {
+        return isChoice;
+    }
+    public void setIsChoice(boolean b) {
+        isChoice = b;
+    }
+    public boolean getIsJudge() {
+        return isJudge;
+    }
+    public void setIsJudge(boolean b) {
+        isJudge = b;
+    }
+    public void setContent(String c) {
+        content = c;
+    }
+    public String giveConcent() {
+        return content;
+    }
+    public void setCorrectAnswer(String a) {
+        correctAnswer = a;
+    }
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+    public void setUserAnswer(String u) {
+        userAnswer = u;
+    }
+    public String getUserAnswer() {
+        return userAnswer;
+    }
+    public void setGiveChoiceA(String a) {
+         giveChoiceA =a ;
+    }
+    public String getGiveChoiceA() {
+        return giveChoiceA;
+    }
+    public void setGiveChoiceB(String b) {
+        giveChoiceB = b;
+    }
+    public String getGiveChoiceB() {
+        return giveChoiceB;
+    }
+    public void setGiveChoiceC(String c) {
+        giveChoiceC =c;
+    }
+    public String getGiveChoiceC() {
+        return giveChoiceC;
+    }
+    public void setGiveChoiceD(String d) {
+        giveChoiceD =d;
+    }
+    public String getGiveChoiceD() {
+        return giveChoiceD;
+    }
+    public void setImageName(String c) {
+        imageName = c;
+    }
+    public String getImageName() {
+        return imageName;
+    }
+}
+
+
+
+
+
+
+
+
+TestPaper.java
+package ch5.data;
+public class TestPaper {
+    private Problem [] problem=null;
+    int index = -1;
+    String problemSource ;
+    public void setProblem(Problem [] problem) {
+        this.problem = problem;
+    }
+    public  Problem  getProblem(int i) {
+        if(problem==null) {
+            return null;
+        }
+        if(problem.length==0) {
+            return null;
+        }
+        if(i>=problem.length||i<0) {
+            return null;
+        }
+        return problem[i];
+    }
+    public   Problem  nextProblem() {
+        index++;
+        if(problem==null){
+            return null;
+        }
+        if(problem.length==0) {
+            return null;
+        }
+        if(index==problem.length) {
+            index=problem.length-1;
+        }
+        return problem[index];
+    }
+    public   Problem [] getAllProblem() {
+        if(Problem==null) {
+            return null;
+        }
+        if(Problem.length==0) {
+            return null;
+        }
+        return problem;
+    }
+    public int getProblemAmount() {
+        if(Problem==null) {
+            return 0;
+        }
+        return problem.length;
+    }
+    public void setProblemSource(String source) {
+        problemSource = source;
+    }
+    public String getProblemSource() {
+        return problemSource;
+    }
+    public void acceptTeacher(Teather teather) {
+        teather.giveTestPaparScore(this);
+    }
+}
+Teacher.java
+package ch5.data;
+public interface Teacher {
+    public void giveTestPaperScore(TestPaper testPaper);
+}
+TeacherOne.java
+package ch5.data;
+import javax.swing.*;
+public class TeacherOne implements Teacher {
+    public void giveTestPaparScore(TestPaper testPaper){
+        int correctAmount=0;     //百分比记分
+        if(testPaper==null){
+            JOptionPane.showMessageDialog(null,"没答题","消息对话框",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Problem p[] = testPaper.getAllProblem();
+        if(p==null||p.length==0){
+            JOptionPane.showMessageDialog(null,"没答题","消息对话框",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        for(int i=0;i<p.length;i++){
+            boolean b = compare(p[i].getUserAnswer(),p[i].getCorrectAnswer());
+            if(b){
+                correctAmount++;
+            }
+        }
+        double result = (double)correctAmount/(double)p.length;
+        int r =(int)(result*100);
+        String s = "共有:"+p.length+"题."+"您做对了"+correctAmount+"题,"+"成绩大约"+r+"%";
+        JLabel mess = new JLabel(s);
+        JOptionPane.showMessageDialog(null,mess,"成绩",JOptionPane.PLAIN_MESSAGE);
+    }
+    private boolean compare(String s,String t){
+        boolean isTure = true;
+        for(int i=0;i<s.length();i++){
+            String temp = ""+s.charAt(i);
+            if(!(t.contains(temp)))
+                isTure = false;
+        }
+        for(int i=0;i<t.length();i++){
+            String temp = ""+t.charAt(i);
+            if(!(s.contains(temp)))
+                isTure = false;
+        }
+        return isTure;
+    }
+}
+TestPaper.java
+package ch5.data;
+public class TestPaper {
+    private Problem [] problem=null;
+    int index = -1;
+    String problemSource ;
+    public void setProblem(Problem [] problem) {
+        this.problem = problem;
+    }
+    public  Problem  getProblem(int i) {
+        if(problem==null) {
+            return null;
+        }
+        if(problem.length==0) {
+            return null;
+        }
+        if(i>=problem.length||i<0) {
+            return null;
+        }
+        return problem[i];
+    }
+    public   Problem  nextProblem() {
+        index++;
+        if(problem==null){
+            return null;
+        }
+        if(problem.length==0) {
+            return null;
+        }
+        if(index==problem.length) {
+            index=problem.length-1;
+        }
+        return problem[index];
+    }
+    public   Problem [] getAllProblem() {
+        if(Problem==null) {
+            return null;
+        }
+        if(Problem.length==0) {
+            return null;
+        }
+        return problem;
+    }
+    public int getProblemAmount() {
+        if(Problem==null) {
+            return 0;
+        }
+        return problem.length;
+    }
+    public void setProblemSource(String source) {
+        problemSource = source;
+    }
+    public String getProblemSource() {
+        return problemSource;
+    }
+    public void acceptTeacher(Teather teather) {
+        teather.giveTestPaparScore(this);
+    }
+}
+
+AppTest.java
+package ch5.test;
+import ch5.data.*;
+public class AppTest{
+    public static void main(String []args){
+        GiveTestPaper initTestPaper = new RamdomInitTestPaper();
+        TestPaper testPaper=initTestPaper.getTestPaper("题库/交通理论.xsl",5);
+        Problem [] problem = testPaper.getAllProblem();
+        for(int i = 0;i<problem.length;i++){
+            int m = i+1;
+            System.out.println("第"+m+"题.");
+            System.out.println(problem[i].getContent());
+            if(problem[i].getIsJudge()){
+                inputOne(problem[i]);
+            }
+            else if(problem[i].getIschoice()){
+                inputTwo(problem[i]);
+             }
+            System.out.println();
+        }
+        problem[0].setUserAnswer("B");
+        problem[1].setUserAnswer("A");
+        problem[2].setUserAnswer("C");
+        problem[3].setUserAnswer("A");
+        problem[0].setUserAnswer("B");
+        problem[1].setUserAnswer("C");
+        testPaper.acceptTeacher(new TeacherOne());
+    }
+    static void inputOne(Problem problem){
+        System.out.printf("%s\t%s\n",problem.getGiveChoiceA(),problem.getGiveChoiceB());
+        System.out.println("图像的名字:"+problem.getImageName());
+        System.out.print1n("正确答案： "+problem.getCorrectAnswer());
+    }
+    static void inputTwo(Problem problem){
+        System.out.printf("%s\t%s\n",problem.getGiveChoiceA(),problem.getGiveChoiceB());
+        System.out.printf("%s\t%s\n",problem.getGiveChoiceC(),problem.getGivechoiceD());
+        System.out.println("图像的名字"+problem.getImageName());
+        System.out.println("正确答案: "+problem.getCorrectAnswer());
+    }
+}
+
+
+TsetPaperView.java
+package ch5.view;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import ch5.data.*;
+public class TestPaperView extends JPanel implements ActionListener{
+    TestPaper testPaper;
+    public Teacher teacher;
+    public JTextArea showContent;
+    public ImageJPanel showImage;
+    public JCheckBox choiceA,choiceB,choiceC,choiceD;
+    public JButton nextProblem,previousProblem;
+    public JButton aProblemSubmit;
+    public JButton renewJButton;
+    public JButton submit;
+    HandleTestPaper handleTestPaper;
+    public int totalTime = 0;
+    public int usedTime = totalTime;
+    public javax.swing.Timer time;
+    public JLabel showUsedTime;
+    JLabel testName;
+    public TestPaperview(){
+        time = new Timer(60*1000,this);
+        initview();
+        registerListener();
+    }
+    public void setTeacher(Teacher teacher){
+        this.teacher = teacher;
+    }
+    public void initview(){
+        setLayout(new BorderLayout());
+        showImage =new ImageJPanel();
+        showContent = new JTextArea(12,12);
+        showContent.setToolTipText("如果题中有图像，在图上单击鼠标可调整观看");
+        showContent.setForeground(Color.blue);
+        showContent.setWrapStyleWord(true);
+        showContent.setLineWrap(true);
+        showContent.setFont(new Font("宋体",Font.BOLD,18));
+        choiceA = new JCheckBox("A");
+        choiceB = new JCheckBox("B");
+        choiceC = new JCheckBox("C");
+        choiceD = new JCheckBox("D");
+        choiceA.setVisible(false);
+        choiceB.setVisible(false);
+        choiceC.setVisible(false);
+        choiceD.setVisible(false);
+        nextProblem = new JButton("下一题目");
+        previousProblem = new JButton("上一题目");
+        aProblemSubmit = new JButton("确认");
+        aProblemSubmit.setVisible(false);
+        renewJButton = new JButton("再来一次");
+        renewJButton.setvisible(false);
+        submit = new JButton("交卷");
+        JPanel pNorth = new JPanel();
+        pNorth.setBackground(Color.cyan);
+        showUsedTime = new JLabel();
+        testName = new JLabel();
+        testName.setFont(new Font("楷体",Font.BOLD,18));
+        pNorth.add(testName);
+        pNorth.add(new JLabe1("单击下一题或上一题按钮开始考试"));
+        pNorth.add(submit);
+        pNorth.add(renewJButton);
+        pNorth.add(showUsedTime);
+        add(pNorth,BorderLayout.NORTH);
+        JPanel pCenter = new JPanel();
+        pCenter.setLayout(new GridLayout(1,2));
+        pCenter.add(new JScrollPane(showContent));
+        pCenter.add(showImage);
+        add(pCenter,BorderLayout.CENTER);
+        JPanel pSouth = new JPanel();
+        pSouth.setLayout(new GridLayout(2,1));
+        JPanel oneInPSouth = new JPanel();
+        JPanel twoInPSouth = new JPanel();
+        oneInPSouth.setBackground(Color.green);
+        oneInPSouth.setBackground(Color.pinl);
+        oneInPSouth.add(choiceA);
+        oneInPSouth.add(choiceB);
+        oneInPSouth.add(choiceC);
+        oneInPSouth.add(choiceD);
+        oneInPSouth.add(aProblemSubmit);
+        twoInPSouth.add(nextProblem);
+        twoInPSouth.add(previousProblem);
+        pSouth.add(oneInPSouth);
+        pSouth.add(twoInPSouth);
+        add(pSouth,BorderLayout.SOUTH);
+        validate();
+    }
+    public void registerListener(){
+        handleTestPaper = new HandleTestPaper();
+        nextProblem.addActionListener(handleTestPaper);
+        previousProblem.addActionListener(handleTestPaper);
+        aProblemSubmit.addActionListener(handleTestPaper);
+        submit.addActionListener(handleTestPaper);
+        renewJButton.addActionListener(handleTestPaper);
+        handleTestPaper.setView(this);
+    }
+    public void setTestPaper(TestPaper testPaper){
+        this.testPaper = testPaper;
+        handleTestPaper.setTestPaper(testPaper);
+    }
+    public void actionPerformed(ActionEvent e){
+        showUsedTime.setText("考试剩余时间："+usedTime);
+        if(usedTime == 0){
+            time.stop();
+            showUsedTime.setText("请交卷");
+            nextProblem.setVisible(false);
+            previousProblem.setVisible(false);
+        }
+        usedTime--;
+    }
+    public void setTestName(String name){
+        testName.setText("【"+name+"】");
+    }
+    public void setTotalTime(int n){
+        totalTime = n;
+        usedTime = n;
+        showUsedTime.setText("考试剩余时间："+usedTime);
+    }
+}
+ImageJpanel.java
+package ch5.view;
+import javax.swing.*;
+import java.awt.event.*;
+public class ImageJPanel extends Jpanel implements MouseListener{
+    Image image;
+    ImageJPanel(){
+        setOpaque(false);
+        setBorder(null);
+        setToolTipText("单击图像单独调整观看");
+        addMouseListener(this);
+    }
+    public void setImage(Image img){
+        image = img;
+    }
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.drawImage(image,0,0,getBounds().width,getBounds().height,this);
+    }
+    public void mousePressed(MouseEvent e){
+        ShowImageDialog ShowImageDialog = new ShowImageDialog(image);
+        ShowImageDialog.setVisible(true);
+    }
+    public void mouseReleased(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mouseClicked(MouseEvent e){}
+}
+ShowImageDialog.java
+package ch5.view;
+import java.awt.*;
+import javax.swing.*;
+public class ShowImageDialog extends JDialog {
+    Image img;
+    ShowImageDialog(Image img){ //构造方法
+        setTitle("显示图像对话框");
+        this.img = img;
+        setSize(500,470);
+        GiveImage image = new GiveImage();
+        add(image);
+        setModal(true);
+        setDefaultCloseOpreration(JFrame.DISPOSE_ON_CLOSE);
+    }
+class GiveImage extends JPanel{ //内部类，专门为该对话框提供图片
+    public void paintCompoent(Graphics g){
+            super.paintComponent(g);
+            g.DrawImage(img,0,0,getBounds().height,this);
+        }
+    }
+}
+IntergrationView.java
+package ch5.view;
+import java.awt.BorderLayout;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+public class IntegrationView extends Jframe{
+    JTabbedPane tabbedpane; //用选项卡集成TsetpaperView视图
+    public IntegrationView(){
+        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);//卡在左侧
+        tabbedPane.validate();
+        add(tabbedPane,BorderLayout.CENTER);
+        setBounds(100,100,1200,560);
+        setDefaultCloseOpreation(JFrame.DISPOSE_ON_CLOSE);
+        setVisible(true);
+    }
+    public void addTestPaperView(String cardName,TestPaperView view){
+        tabbedPane.add(cardName,view);
+        validate();
+    }
+}
+HandleTestPaper.java
+package ch5.view;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import ch5.data.*;
+public class HandleTestPaper implements ActionListener{
+    TestPapaerView view;
+    TestPaper testPaper;    //需要处理的试卷
+    Problem problem;        //当前的题目
+    Toolkit tool;           //处理图像
+    public HandleTestPaper(){
+        tool = Toolkit.getDefaultToolkit();
+    }
+    public void setView(TestPaperView view){
+        this.view = view;
+    }
+    public void setTestPaper(TestPaper testPaper){
+        this.testPaper = testPaper;
+    }
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource()==view.nextProblem){
+            view.time.start();   //开始计时
+            if(testPaper!=null){
+                problem = testPaper.nextProblem();
+                handleProblem(problem);
+            }
+            else{
+                JOptionPane.showMessageDialog
+                (view,"没有试题","消息对话框",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        if(e.getSource()==view.previousProblem){
+            view.time.start();   //开始计时
+            if(testPaper!=null){
+                problem = testPaper.previousProblem();
+                handleProblem(problem);
+            }
+            else{
+                JOptionPane.showMessageDialog
+                (view,"没有试题","消息对话框",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        if(e.getSource()==view.aProblemSubmit){  //确认一道题目的答案
+            String answer = "";
+            if(view.choiceA.isSelected()){
+                answer = answer+"A";
+            }
+            if(view.choiceB.isSelected()) {
+                answer = answer+"B";
+            }
+            if(view.choiceC.isSelected()) {
+                answer = answer+"C";
+            }
+            if(view.choiceD.isSelected()) {
+                answer = answer+"D";
+            }
+            if(problem==null) {
+                JOptionPane.showMessageDialog
+                (view,"û������","��Ϣ�Ի���",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            view.choiceA.setVisible(false);
+            view.choiceB.setVisible(false);
+            view.choiceC.setVisible(false);
+            view.choiceD.setVisible(false);
+            view.aProblemSubmit.setVisible(true);
+            problem.setUserAnswer(answer);
+            }
+            if(e.getSource()==view.submit) {
+                testPaper.acceptTeacher(view.teacher);
+                view.renewJButton.setVisible(true);
+                view.submit.setVisible(false);
+                view.time.stop();
+                view.showUsedTime.setText("������");
+            }
+            if(e.getSource()==view.renewJButton) {
+                view.showUsedTime.setText("");
+                view.usedTime = view.totalTime;
+                view.showUsedTime.setText("����ʣ��ʱ��"+view.totalTime);
+                view.showContent.setText("null");
+                Image img = tool.getImage("ͼ�����/renew.jpg");
+                handleImage(img);
+                view.showImage.repaint();
+                view.nextProblem.setVisible(true);
+                view.previousProblem.setVisible(true);
+                String problemSource= testPaper.getProblemSource();
+                GiveTestPaper initTestPaper = new RamdomInitTestPaper();
+                testPaper=initTestPaper.getTestPaper(problemSource,tesPaper.getProblemAmount());
+                view.renewJButton.setVisible(false);
+                view.submit.setVisible(true);   
+            }
+            view.choiceA.setVisible(false);
+            view.choiceB.setVisible(false);
+            view.choiceC.setVisible(false);
+            view.choiceD.setVisible(false);
+            }
+            private void handleProblem(Problem problem) {
+                if(problem==null) {
+                    JOptionPane.showMessageDialog
+                    (view,"没有试题","消息对话框",JOptionPane.WARNING_MESSAGE);
+                }
+                  
+                  else {
+            
+                  view. aProblenSubmit.setVisible (true);
+            
+                  view.showContent.setText(problem.getContent());
+                  view.showContent.setvisible(true);
+                  if (problem.getIsChoice()) {
+                    handelChoice();
+                    }
+                  else if(problem.getIsJudge()) {
+                      handelJudge() ;
+                  }
+            
+                  String imageName = problem.getImageNane () ;
+            
+                  Image img = tool.getImage("ͼ�����/"+imageName) ;
+                  handleImage(img) ;}
+            }
+             private void handelJudge(){
+             
+            
+                  view. choiceA. setText (problem.getGiveChoiceA());
+                  view. choiceB. setText (problem.getGivechoiceB());
+                  view. choiceA.setVisible(true);
+                  view. choiceB.setVisible(true);
+                  view. choiceC.setVisible(false);
+                  view. choiceD.setVisible(false);
+              }
+                  private void handelChoice(){
+            
+                    view. choiceA.setText (problem.getGiveChoiceA());            
+                    view. choiceB.setText(problem.getGiveChoiceB());
+                    view. choiceC.setText(problem .getGiveChoiceC());
+                    view. choiceD. setText(problem .getGiveChoiceD());
+                    view. choiceA.setVisible (true);
+                    view. choiceB.setVisible (true);
+                    view. choiceC.setVisible(true);
+                    view. choiceD.setVisible(true);
+                }
+                  private void handleImage (Image image) {
+                  
+                  view. showImage.setImage (image);
+                  view.showImage.repaint(); 
+            }
+             }
+AppWindow.java
+package ch5.gui;
+import ch5.data. GiveTestPaper;
+import ch5.data.RamdomInitTestPaper;
+import ch5.data.TestPaper;
+import ch5.data.TeacherOne;
+import ch5.view.TestPaperView;
+import ch5.view.IntegrationView;
+public  class AppWindow {
+  public static void main(String []args) {
+    String testName="";
+    IntegrationView integrationView = new IntegrationView();
+    GiveTestPaper initTestPaper = new RamdomInitTestPaperl();
+    TestPaper testPaper = initTestPaper.getTestPaper("���/��ͨ����.x1s",5); 
+    TestPaperView testView = new TestPaperView();
+    testView.setTestPaper (testPaper); 
+    testView.setTeacher (new TeacherOne());  
+    testName = "��ͨ��ѵ��";
+    testView.setTestName (testName);
+
+      testView.setTotalTime(15);  
+    integrationView.addTestPaperView(testName, testView) ;
+
+      initTestPaper = new RamdomInitTestPaper();  
+    testPaper= initTestPaper.getTestPaper("���/java����.x1s",6);
+    testView = new TestPaperView();
+    testView.setTestPaper (testPaper) ; 
+
+      testView.setTeacher (new TeacherOne());
+    testName = "Java ѵ��";
+
+      testView.setTestName (testName) ;
+    testView.setTotalTime(10);
+
+      integrationView.addTestPaperView(testName, testView) ;
+  }
+}
+
+
